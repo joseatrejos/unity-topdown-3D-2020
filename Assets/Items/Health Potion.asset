@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9ed4899fa083ee4185c5c2e95bd391c, type: 3}
-  m_Name: Potion 1
+  m_Name: Health Potion
   m_EditorClassIdentifier: 
   icon: {fileID: 0}
-  objectName: Potion
-  description: 
-  healthPoints: 0
+  objectName: Health Potion
+  description: Potion that restores 10 health points.
+  healthPoints: 10
   manaPoints: 0

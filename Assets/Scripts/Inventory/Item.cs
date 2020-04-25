@@ -8,7 +8,7 @@ public class Item : ScriptableObject
     Sprite icon;
     
     [SerializeField]
-    protected string objectName = "Potion";
+    protected string objectName;
 
     [SerializeField, TextArea(3, 10)]
     string description;

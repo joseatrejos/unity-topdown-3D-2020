@@ -6,16 +6,22 @@ using UnityEngine.UI;
 public class NPC : MonoBehaviour
 {
     [SerializeField]
-    GameObject npcTextBox;
+    TextBoxDialogue textBoxDialogue;
+
+    [SerializeField, TextArea(3, 5)]
+    string npcDialogue;
 
     public void StartTalking()
     {
-        npcTextBox.SetActive(true);
+        textBoxDialogue.gameObject.SetActive(true);
+        textBoxDialogue.Message = npcDialogue;
+        textBoxDialogue.ShowDialogue();
     }
 
     public void StopTalking()
     {
-        npcTextBox.SetActive(false);
+        textBoxDialogue.gameObject.SetActive(false);
+        textBoxDialogue.ClearText();
     }
     
     void OnTriggerEnter(Collider col)

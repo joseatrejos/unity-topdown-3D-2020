@@ -7,10 +7,10 @@ using UnityEngine;
 public class Potion : Consumable
 {
     [SerializeField]
-    int healthPoints;
+    int healthPoints = 0;
     
     [SerializeField]
-    int manaPoints;
+    int manaPoints = 0;
 
     public int RestoreHealth { get => healthPoints; }
     public int RestoreMana { get => manaPoints; }
@@ -18,6 +18,7 @@ public class Potion : Consumable
     public override void Drink()
     {
         base.Drink();
-        Debug.Log("Potion Consumed");
+        Debug.Log(RestoreHealth + " health points recovered");
+        Debug.Log(RestoreMana + " mana points recovered");
     }
 }

@@ -10,7 +10,6 @@ public class HealthPotion : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         potion.Drink();
-        Debug.Log("Health Restored");
         Destroy(this.gameObject);
     }
 }
