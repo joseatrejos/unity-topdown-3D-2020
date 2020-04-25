@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
@@ -10,13 +11,21 @@ public class Enemy : MonoBehaviour
     [SerializeField, Range(0f, 10f)]
     float minDistance = 5f;
 
+    NavMeshAgent navMeshAgent;
+
     void Update()
     {
-        if(1 == 1)
+        if(AttackRange)
         {
-            transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+            //transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+            navMeshAgent.destination = GameManager.instance.Player.transform.position;
             transform.LookAt(GameManager.instance.Player.transform);
         }
+    }
+
+    void Awake()
+    {
+        navMeshAgent = GetComponent<NavMeshAgent>();
     }
     
     bool AttackRange
