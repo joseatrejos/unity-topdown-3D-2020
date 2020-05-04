@@ -5,7 +5,6 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField]
     Animator animator;
 
     [SerializeField, Range(0.1f, 10f)]
@@ -21,7 +20,6 @@ public class Enemy : MonoBehaviour
         if(AttackRange)
         {
             // transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
-            animator.SetBool("attack", true);
             navMeshAgent.destination = GameManager.instance.Player.transform.position;
             transform.LookAt(GameManager.instance.Player.transform);
         }
@@ -33,7 +31,7 @@ public class Enemy : MonoBehaviour
 
     void LateUpdate()
     {
-        animator.SetBool("attack", false);
+        animator.SetBool("attack", AttackRange);
     }
 
     void Awake()
