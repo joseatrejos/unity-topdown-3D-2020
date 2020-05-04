@@ -9,7 +9,10 @@ public class HealthPotion : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        potion.Drink();
-        Destroy(this.gameObject);
+        if(other.tag == "Player")
+        {
+            potion.Drink();
+            Destroy(this.gameObject);
+        }
     }
 }

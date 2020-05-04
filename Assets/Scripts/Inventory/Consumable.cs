@@ -6,7 +6,6 @@ public class Consumable : Item
 {
     public virtual void Drink()
     {
-        // DestroyImmediate(this, true);
         Debug.Log(name + " Consumed");
     }
 }

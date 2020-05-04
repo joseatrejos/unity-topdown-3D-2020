@@ -5,6 +5,9 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
+    [SerializeField]
+    Animator animator;
+
     [SerializeField, Range(0.1f, 10f)]
     float moveSpeed = 3.5f;
 
@@ -17,19 +20,35 @@ public class Enemy : MonoBehaviour
     {
         if(AttackRange)
         {
-            //transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+            // transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+            animator.SetBool("attack", true);
             navMeshAgent.destination = GameManager.instance.Player.transform.position;
             transform.LookAt(GameManager.instance.Player.transform);
         }
+        else
+        {
+            navMeshAgent.destination = transform.position;
+        }
+    }
+
+    void LateUpdate()
+    {
+        animator.SetBool("attack", false);
     }
 
     void Awake()
     {
+        animator = GetComponent<Animator>();
         navMeshAgent = GetComponent<NavMeshAgent>();
     }
     
     bool AttackRange
     {
-        get => Vector3.Distance(this.transform.position, GameManager.instance.Player.transform.position) <= minDistance;
+        get => distanceToPlayer <= minDistance && distanceToPlayer > navMeshAgent.stoppingDistance;
+    }
+
+    float distanceToPlayer
+    {
+        get => Vector3.Distance(this.transform.position, GameManager.instance.Player.transform.position);
     }
 }
