@@ -8,6 +8,15 @@ public class Player : MonoBehaviour
     float moveSpeed = 0;
 
     Animator animator;
+    public Animator Animator { get => animator; }
+
+    [SerializeField]
+    GameObject weapon;
+
+    void Start()
+    {
+        WeaponVisibility(false);
+    }
 
     void Awake()
     {
@@ -29,5 +38,10 @@ public class Player : MonoBehaviour
     Vector3 Axis
     {
         get => new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+    }
+
+    public void WeaponVisibility(bool visibility)
+    {
+        weapon.SetActive(visibility);
     }
 }

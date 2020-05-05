@@ -15,10 +15,26 @@ public class Enemy : MonoBehaviour
 
     NavMeshAgent navMeshAgent;
 
+    [SerializeField]
+    GameObject weapon;
+
+    void Start()
+    {
+        WeaponVisibility(false);
+    }
+
     void Update()
     {
         if(AttackRange)
         {
+            // In case you prefer the combat to begin as soon as the enemy starts following you
+            // BeginEnemyCombat();
+            // GameManager.instance.StartCombat();
+
+            if(!GameManager.instance.IsInCombat)
+            {
+                GameManager.instance.IsInCombat = true;
+            }
             // transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
             navMeshAgent.destination = GameManager.instance.Player.transform.position;
             transform.LookAt(GameManager.instance.Player.transform);
@@ -26,6 +42,18 @@ public class Enemy : MonoBehaviour
         else
         {
             navMeshAgent.destination = transform.position;
+
+            if(GameManager.instance.IsInCombat && distanceToPlayer <= minDistance)
+            {
+                GameManager.instance.StartCombat();
+                animator.SetLayerWeight(1, 1);
+                WeaponVisibility(true);
+            }
+            else if(OutOfAttackRange)
+            {
+                GameManager.instance.EscapeCombat();
+                EndEnemyCombat();
+            }
         }
     }
 
@@ -39,6 +67,11 @@ public class Enemy : MonoBehaviour
         animator = GetComponent<Animator>();
         navMeshAgent = GetComponent<NavMeshAgent>();
     }
+
+    bool OutOfAttackRange
+    {
+        get => GameManager.instance.IsInCombat && distanceToPlayer > minDistance;
+    }
     
     bool AttackRange
     {
@@ -48,5 +81,24 @@ public class Enemy : MonoBehaviour
     float distanceToPlayer
     {
         get => Vector3.Distance(this.transform.position, GameManager.instance.Player.transform.position);
+    }
+
+    public void WeaponVisibility(bool visibility)
+    {
+        weapon.SetActive(visibility);
+    }
+
+    public void BeginEnemyCombat()
+    {
+        animator.SetLayerWeight(0, 0);
+        animator.SetLayerWeight(1, 1);
+        WeaponVisibility(true);   
+    }
+
+    public void EndEnemyCombat()
+    {
+        animator.SetLayerWeight(1, 0);
+        animator.SetLayerWeight(0, 1);
+        WeaponVisibility(false);   
     }
 }
