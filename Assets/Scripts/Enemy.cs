@@ -31,9 +31,9 @@ public class Enemy : MonoBehaviour
             // BeginEnemyCombat();
             // GameManager.instance.StartCombat();
 
-            if(!GameManager.instance.IsInCombat)
+            if(!GameManager.instance.IsInChase)
             {
-                GameManager.instance.IsInCombat = true;
+                GameManager.instance.BeginChase();
             }
             // transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
             navMeshAgent.destination = GameManager.instance.Player.transform.position;
@@ -43,7 +43,7 @@ public class Enemy : MonoBehaviour
         {
             navMeshAgent.destination = transform.position;
 
-            if(GameManager.instance.IsInCombat && distanceToPlayer <= minDistance)
+            if(GameManager.instance.IsInChase && distanceToPlayer <= minDistance && !GameManager.instance.IsInCombat)
             {
                 GameManager.instance.StartCombat();
                 animator.SetLayerWeight(1, 1);
@@ -51,7 +51,7 @@ public class Enemy : MonoBehaviour
             }
             else if(OutOfAttackRange)
             {
-                GameManager.instance.EscapeCombat();
+                GameManager.instance.EscapeCombatAndChase();
                 EndEnemyCombat();
             }
         }
@@ -70,7 +70,7 @@ public class Enemy : MonoBehaviour
 
     bool OutOfAttackRange
     {
-        get => GameManager.instance.IsInCombat && distanceToPlayer > minDistance;
+        get => GameManager.instance.IsInChase && distanceToPlayer > minDistance;
     }
     
     bool AttackRange

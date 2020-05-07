@@ -13,6 +13,13 @@ public class GameManager : MonoBehaviour
 
     bool isInCombat = false;
     public bool IsInCombat { get => isInCombat; set => isInCombat = value; }
+    bool isInChase = false;
+    public bool IsInChase { get => isInChase; set => isInChase = value; }
+
+    [SerializeField]
+    SoundManager soundManager;
+
+    AudioSource audioSource;
 
     void Awake()
     {
@@ -27,19 +34,31 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    public void Start()
+    {
+        soundManager.AudioSource = GetComponent<AudioSource>();
+        soundManager.PlayBGM();
+    }
+
     public void StartCombat()
     {
+        soundManager.WeaponDrawn();
+        StartCoroutine(DelayedCombatMusic());
         isInCombat = true;
         player.Animator.SetLayerWeight(1, 1);
         player.WeaponVisibility(true);
+        isInCombat = true;
     }
 
-    public void EscapeCombat()
+    public void EscapeCombatAndChase()
     {
+        if(isInCombat || isInChase)
+            soundManager.PlayBGM();
         isInCombat = false;
         player.Animator.SetLayerWeight(player.Animator.GetLayerIndex("Base Layer"), 1);
         player.Animator.SetLayerWeight(player.Animator.GetLayerIndex("Combat"), 0);
         player.WeaponVisibility(false);
+        isInChase = false;
 
         /*
         Debug.Log("Base Layer Index: " + player.Animator.GetLayerIndex("Base Layer"));
@@ -47,5 +66,17 @@ public class GameManager : MonoBehaviour
         Debug.Log("Combat Layer Index: " + player.Animator.GetLayerIndex("Combat"));
         Debug.Log("Combat Layer Weight: " + player.Animator.GetLayerWeight(player.Animator.GetLayerIndex("Combat")));
         */
+    }
+
+    public void BeginChase()
+    {
+        soundManager.PlayChaseMusic();
+        isInChase = true;  
+    }
+
+    IEnumerator DelayedCombatMusic()
+    {
+        yield return new WaitForSeconds(1);
+        soundManager.PlayCombatMusic();
     }
 }
